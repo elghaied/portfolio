@@ -1,3 +1,7 @@
+
+import { addVariablesForColors } from './addVariablesForColors';
+
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -6,8 +10,8 @@ export default {
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
   ],
-  darkMode: ['selector', '[data-theme="dark"]'],
-  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
+  darkMode: ['selector', '[data-theme="dark"]','class'],
+  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography'),addVariablesForColors],
   prefix: '',
   safelist: [
     'lg:col-span-4',
