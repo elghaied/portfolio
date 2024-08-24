@@ -5,6 +5,8 @@ import configPromise from '@payload-config'
 import { Portfolio, Project } from 'src/payload-types'
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import Technologies from 'src/payload/collections/Projects/Technologies'
+import { Boxes } from '@/components/ui/background-boxes'
+import { cn } from '@/utilities/cn'
 export default async function Page() {
   const url = '/'
 
@@ -19,7 +21,6 @@ export default async function Page() {
     draft,
     limit: 1,
     overrideAccess: true,
-
   })
 
   portoflio = portoflioResult.docs?.[0]
@@ -43,6 +44,17 @@ export default async function Page() {
   return (
     <div className="pt-24 pb-24">
       <div className="container mb-16">
+        <div className="h-96 relative w-full overflow-hidden bg-slate-900 flex flex-col items-center justify-center rounded-lg">
+          <div className="absolute inset-0 w-full h-full bg-slate-900 z-20 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />
+
+          <Boxes />
+          <h1 className={cn('md:text-4xl text-xl text-white relative z-20')}>
+            Tailwind is Awesome
+          </h1>
+          <p className="text-center mt-2 text-neutral-300 relative z-20">
+            Framer motion is the best animation library ngl
+          </p>
+        </div>
         <div className="prose dark:prose-invert max-w-none">
           <h1>{banner.bannerTitle}</h1>
           <h2>{banner.bannerDescription}</h2>
