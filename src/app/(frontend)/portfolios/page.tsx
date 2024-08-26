@@ -7,6 +7,7 @@ import { PayloadRedirects } from '@/components/PayloadRedirects'
 import Technologies from 'src/payload/collections/Projects/Technologies'
 import { Boxes } from '@/components/ui/background-boxes'
 import { cn } from '@/utilities/cn'
+import ProjectCard from '@/components/ProjectCard'
 export default async function Page() {
   const url = '/'
 
@@ -25,7 +26,7 @@ export default async function Page() {
 
   portoflio = portoflioResult.docs?.[0]
 
-  let projects: Project | null
+  let projects: Project[] | null
 
   const projectsResult = await payload.find({
     collection: 'projects',
@@ -34,7 +35,8 @@ export default async function Page() {
     overrideAccess: true,
   })
 
-  projects = projectsResult.docs[0]
+  projects = projectsResult.docs
+
 
   if (!portoflio) {
     return <PayloadRedirects url={url} />
@@ -76,6 +78,23 @@ export default async function Page() {
               })}
             </ul>
           )}
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {projects.map((project, i) => {
+              if (typeof project === 'string') {
+                // Project is a string
+                return (
+                  <div key={i} className="bg-white shadow-md rounded-lg p-4">
+                    <p>{project}</p>
+                  </div>
+                )
+              } else if (typeof project === 'object' && project.title) {
+                // Project is a Project object
+                return <ProjectCard key={i} project={project} />
+              }
+              return null
+            })}
+          </div>
         </div>
       </div>
     </div>

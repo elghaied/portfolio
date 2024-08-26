@@ -1,35 +1,33 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
+import Icon from '../DynamicIcon';
 
-const DynamicIcon = ({ iconName }) => {
-  const [Icon, setIcon] = useState(null);
+interface Technology {
+  id: string;
+  name: string;
+}
 
-  useEffect(() => {
-    const importIcon = async () => {
-      try {
-        // This assumes all icons are in the 'di' directory. Adjust if needed.
-        const { [iconName]: ImportedIcon } = await import(`@react-icons/di/${iconName}`);
-        setIcon(() => ImportedIcon);
-      } catch (err) {
-        console.error(`Error importing icon: ${iconName}`, err);
-      }
-    };
+interface Project {
+  title: string;
+  preview?: {
+    url: string;
+  };
+  description: string;
+  technologies: Technology[];
+  slug: string;
+}
 
-    importIcon();
-  }, [iconName]);
+interface ProjectCardProps {
+  project: Project;
+}
 
-  if (!Icon) return null;
-  return <Icon className="mr-1" />;
-};
-
-const ProjectCard = ({ project }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const { title, preview, description, technologies, slug } = project;
 
   return (
-    <div className="project-card border border-border rounded-lg overflow-hidden bg-card hover:shadow-lg transition-shadow duration-300">
+    <div className="bg-white shadow-md rounded-lg overflow-hidden transition-shadow duration-300 hover:shadow-lg h-full flex flex-col">
       <div className="relative w-full h-48">
         {preview ? (
           <Image
@@ -44,17 +42,17 @@ const ProjectCard = ({ project }) => {
           </div>
         )}
       </div>
-      <div className="p-4">
+      <div className="p-4 flex-grow flex flex-col">
         <h3 className="text-xl font-bold mb-2">
           <Link href={`/projects/${slug}`} className="hover:underline">
             {title}
           </Link>
         </h3>
-        <p className="text-sm text-gray-600 mb-4">{description}</p>
+        <p className="text-sm text-gray-600 mb-4 flex-grow">{description}</p>
         <div className="flex flex-wrap gap-2">
           {technologies?.map((tech) => (
             <div key={tech.id} className="flex items-center bg-gray-100 rounded-full px-3 py-1">
-              <DynamicIcon iconName={tech.iconName} />
+              <Icon name={tech.name} className="mr-1" />
               <span className="text-xs">{tech.name}</span>
             </div>
           ))}
