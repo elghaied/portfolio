@@ -15,6 +15,7 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
+import { FormBlock } from '../../blocks/Form'
 export const Portfolios: CollectionConfig = {
   slug: 'portfolios',
   access: {
@@ -101,7 +102,12 @@ export const Portfolios: CollectionConfig = {
               relationTo: 'technologies',
               hasMany: true,
             },
-
+            {
+              name: 'layout',
+              type: 'blocks',
+              blocks: [ FormBlock],
+              required: true,
+            },
           ]
         },
 

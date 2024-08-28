@@ -29,28 +29,41 @@ const iconSet = [
   SiTailwindcss, SiBootstrap, SiNextdotjs, SiNuxtdotjs, SiSvelte
 ];
 
+const boxColors = [
+  "#7dd3fc",  // --sky-300
+  "#f9a8d4",  // --pink-300
+  "#86efac",  // --green-300
+  "#fde047",  // --yellow-300
+  "#f87171",  // --red-300
+  "#c084fc",  // --purple-300
+  "#60a5fa",  // --blue-300
+  "#818cf8",  // --indigo-300
+  "#a78bfa",  // --violet-300
+];
+
+const iconHoverColors = [
+  "#f97316",  // Complementary to --sky-300
+  "#36d759",  // Complementary to --pink-300
+  "#d086ef",  // Complementary to --green-300
+  "#047bfd",  // Complementary to --yellow-300
+  "#71f8f8",  // Complementary to --red-300
+  "#fc8e84",  // Complementary to --purple-300
+  "#fa6b60",  // Complementary to --blue-300
+  "#f8cf81",  // Complementary to --indigo-300
+  "#fadb9c",  // Complementary to --violet-300
+];
+
+
+
+
+const getRandomIcon = () => {
+  const RandomIcon = iconSet[Math.floor(Math.random() * iconSet.length)];
+  return <RandomIcon className="w-8 h-8 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-inherit " />;
+};
+
 export const BoxesCore = ({ className, ...rest }: { className?: string }) => {
   const rows = new Array(150).fill(1);
   const cols = new Array(100).fill(1);
-  let colors = [
-    "--sky-300",
-    "--pink-300",
-    "--green-300",
-    "--yellow-300",
-    "--red-300",
-    "--purple-300",
-    "--blue-300",
-    "--indigo-300",
-    "--violet-300",
-  ];
-  const getRandomColor = () => {
-    return colors[Math.floor(Math.random() * colors.length)];
-  };
-
-  const getRandomIcon = () => {
-    const RandomIcon = iconSet[Math.floor(Math.random() * iconSet.length)];
-    return <RandomIcon className="w-4 h-4" />;
-  };
 
   return (
     <div
@@ -58,7 +71,7 @@ export const BoxesCore = ({ className, ...rest }: { className?: string }) => {
         transform: `translate(-40%,-60%) skewX(-48deg) skewY(14deg) scale(0.675) rotate(0deg) translateZ(0)`,
       }}
       className={cn(
-        "absolute left-1/4 p-4 -top-1/4 flex  -translate-x-1/2 -translate-y-1/2 w-full h-full z-0 ",
+        "absolute left-1/4 p-4 -top-1/4 flex -translate-x-1/2 -translate-y-1/2 w-full h-full z-0 ",
         className
       )}
       {...rest}
@@ -66,31 +79,38 @@ export const BoxesCore = ({ className, ...rest }: { className?: string }) => {
       {rows.map((_, i) => (
         <motion.div
           key={`row` + i}
-          className="w-16 h-8  border-l  border-slate-700 relative"
+          className="w-32 h-16 border-l border-slate-700 relative"
         >
-          {cols.map((_, j) => (
-            <motion.div
-              whileHover={{
-                backgroundColor: `var(${getRandomColor()})`,
-                transition: { duration: 0 },
-              }}
-              animate={{
-                transition: { duration: 2 },
-              }}
-              key={`col` + j}
-              className="w-16 h-8  border-r border-t border-slate-700 relative"
-            >
+          {cols.map((_, j) => {
+            const random = Math.floor(Math.random() * boxColors.length);
+            const boxColor = boxColors[random];
+            const iconHoverColor =  iconHoverColors[random];
 
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-slate-500">
+            return (
+              <motion.div
+                whileHover={{
+                  backgroundColor: boxColor,
+                  color: iconHoverColor,
+                  transition: { duration: 0 },
+
+                }}
+                animate={{
+                  transition: { duration: 2 },
+                }}
+                key={`col` + j}
+                className="w-32 h-16 border-r border-t border-slate-700 relative text-slate-500"
+              >
+
                   {getRandomIcon()}
-                </div>
+                </motion.div>
 
-            </motion.div>
-          ))}
+            );
+          })}
         </motion.div>
       ))}
     </div>
   );
 };
+
 
 export const Boxes = React.memo(BoxesCore);

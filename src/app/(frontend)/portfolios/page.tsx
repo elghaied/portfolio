@@ -2,12 +2,30 @@ import { getPayloadHMR } from '@payloadcms/next/utilities'
 import { draftMode } from 'next/headers'
 import { cache } from 'react'
 import configPromise from '@payload-config'
-import { Portfolio, Project } from 'src/payload-types'
+import { Portfolio, Project, Service } from 'src/payload-types'
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import Technologies from 'src/payload/collections/Projects/Technologies'
 import { Boxes } from '@/components/ui/background-boxes'
 import { cn } from '@/utilities/cn'
 import ProjectCard from '@/components/ProjectCard'
+import { HeroParallax } from '@/components/ui/hero-parallax'
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Badge } from '@/components/ui/badge'
+import Icon from '@/components/DynamicIcon'
+import ServicesSection from '@/components/ServicesSection '
+import SocialsSection from '@/components/SocialsSection'
+import { Blocks } from '@/components/Blocks'
+
 export default async function Page() {
   const url = '/'
 
@@ -37,64 +55,105 @@ export default async function Page() {
 
   projects = projectsResult.docs
 
+  let services: Service[] | null
+  const servicesResult = await payload.find({
+    collection: 'services',
+    draft,
+    limit: 6,
+    overrideAccess: true,
+  })
+
+  services = servicesResult.docs
 
   if (!portoflio) {
     return <PayloadRedirects url={url} />
   }
 
-  const { banner, bio, skills } = portoflio.content
+  const { banner, bio, skills,layout } = portoflio.content
+
+  const getInitials = (name) => {
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase()
+  }
   return (
-    <div className="pt-24 pb-24">
-      <div className="container mb-16">
-        <div className="h-96 relative w-full overflow-hidden bg-slate-900 flex flex-col items-center justify-center rounded-lg">
+    <div className="">
+      <div className="">
+        <div className="h-screen relative w-full overflow-hidden bg-slate-900 flex flex-col items-center justify-center rounded-lg">
           <div className="absolute inset-0 w-full h-full bg-slate-900 z-20 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />
 
           <Boxes />
           <h1 className={cn('md:text-4xl text-xl text-white relative z-20')}>
-            Tailwind is Awesome
+            {banner.bannerTitle}
           </h1>
           <p className="text-center mt-2 text-neutral-300 relative z-20">
-            Framer motion is the best animation library ngl
+            {banner.bannerDescription}
           </p>
         </div>
-        <div className="prose dark:prose-invert max-w-none">
-          <h1>{banner.bannerTitle}</h1>
-          <h2>{banner.bannerDescription}</h2>
-
-          <p>{bio.devName}</p>
-          <p>{bio.aboutMe}</p>
-
-          {skills && Array.isArray(skills) && skills.length > 0 && (
-            <ul>
-              {skills.map((skill, i) => {
-                if (typeof skill === 'string') {
-                  // Skill is a string
-                  return <li key={i}>{skill}</li>
-                } else if (typeof skill === 'object' && skill.name) {
-                  // Skill is a Technology object
-                  return <li key={i}>{skill.name}</li>
-                }
-                return null
-              })}
-            </ul>
-          )}
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((project, i) => {
-              if (typeof project === 'string') {
-                // Project is a string
-                return (
-                  <div key={i} className="bg-white shadow-md rounded-lg p-4">
-                    <p>{project}</p>
+        <div className="container mx-auto py-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="md:col-span-1">
+              <CardHeader>
+                <div className="flex items-center space-x-4">
+                  <Avatar className="w-20 h-20">
+                    <AvatarImage
+                      src={typeof bio.pfp === 'string' ? bio.pfp : bio.pfp?.url}
+                      alt={bio.devName}
+                    />
+                    <AvatarFallback>{getInitials(bio.devName)}</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <CardTitle className="text-2xl">{bio.devName}</CardTitle>
+                    <p className="text-sm text-muted-foreground">Software Developer</p>
                   </div>
-                )
-              } else if (typeof project === 'object' && project.title) {
-                // Project is a Project object
-                return <ProjectCard key={i} project={project} />
-              }
-              return null
-            })}
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm">{bio.aboutMe}</p>
+              </CardContent>
+            </Card>
+
+            <Card className="md:col-span-1">
+              <CardHeader>
+                <CardTitle>Skills</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-2">
+                  {skills.map((skill, index) => (
+                    <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                      <Icon
+                        name={typeof skill === 'string' ? skill : skill.name}
+                        className="w-3 h-3"
+                      />
+                      <span className="text-xs">
+                        {typeof skill === 'string' ? skill : skill.name}
+                      </span>
+                    </Badge>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
           </div>
+        </div>
+        <div className="container mx-auto py-8">
+          <h2 className="text-3xl font-bold mb-6">My Projects</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {projects.map((project, i) => (
+              <ProjectCard key={i} project={project} />
+            ))}
+          </div>
+        </div>
+
+        <div className="container mx-auto py-8">
+          <ServicesSection services={services} />{' '}
+        </div>
+        <div>
+        <Blocks blocks={layout} />
+        </div>
+        <div className="container mx-auto py-8">
+        <SocialsSection />
         </div>
       </div>
     </div>

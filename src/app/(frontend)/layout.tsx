@@ -14,7 +14,9 @@ import { InitTheme } from '../providers/Theme/InitTheme'
 import { mergeOpenGraph } from '../utilities/mergeOpenGraph'
 import './globals.css'
 
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
+
   return (
     <html className={cn(GeistSans.variable, GeistMono.variable)} lang="en" suppressHydrationWarning>
       <head>
@@ -24,12 +26,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <Providers>
-          <AdminBar />
+          {/* <AdminBar /> */}
           <LivePreviewListener />
+          {/* {isPortfolios ? null : <Header />} */}
 
-          <Header />
           {children}
-          <Footer />
+          {/* {isPortfolios ? null : <Footer /> } */}
         </Providers>
       </body>
     </html>

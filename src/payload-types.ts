@@ -19,6 +19,7 @@ export interface Config {
     projects: Project;
     technologies: Technology;
     portfolios: Portfolio;
+    services: Service;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -95,7 +96,7 @@ export interface Page {
           id?: string | null;
         }[]
       | null;
-    media?: string | Media | null;
+    media?: (string | null) | Media;
   };
   layout: (
     | {
@@ -234,7 +235,7 @@ export interface Page {
   )[];
   meta?: {
     title?: string | null;
-    image?: string | Media | null;
+    image?: (string | null) | Media;
     description?: string | null;
   };
   publishedAt?: string | null;
@@ -322,7 +323,7 @@ export interface Post {
   categories?: (string | Category)[] | null;
   meta?: {
     title?: string | null;
-    image?: string | Media | null;
+    image?: (string | null) | Media;
     description?: string | null;
   };
   publishedAt?: string | null;
@@ -528,12 +529,12 @@ export interface Project {
   id: string;
   title: string;
   description: string;
-  preview?: string | Media | null;
+  preview?: (string | null) | Media;
   technologies?: (string | Technology)[] | null;
   link?: string | null;
   meta?: {
     title?: string | null;
-    image?: string | Media | null;
+    image?: (string | null) | Media;
     description?: string | null;
   };
   publishedAt?: string | null;
@@ -569,20 +570,42 @@ export interface Portfolio {
   title: string;
   content: {
     banner: {
-      image?: string | Media | null;
+      image?: (string | null) | Media;
       bannerTitle: string;
       bannerDescription: string;
     };
     bio: {
       devName: string;
       aboutMe: string;
-      pfp?: string | Media | null;
+      pfp?: (string | null) | Media;
     };
     skills?: (string | Technology)[] | null;
+    layout: {
+      form: string | Form;
+      enableIntro?: boolean | null;
+      introContent?: {
+        root: {
+          type: string;
+          children: {
+            type: string;
+            version: number;
+            [k: string]: unknown;
+          }[];
+          direction: ('ltr' | 'rtl') | null;
+          format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+          indent: number;
+          version: number;
+        };
+        [k: string]: unknown;
+      } | null;
+      id?: string | null;
+      blockName?: string | null;
+      blockType: 'formBlock';
+    }[];
   };
   meta?: {
     title?: string | null;
-    image?: string | Media | null;
+    image?: (string | null) | Media;
     description?: string | null;
   };
   publishedAt?: string | null;
@@ -590,6 +613,19 @@ export interface Portfolio {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services".
+ */
+export interface Service {
+  id: string;
+  title: string;
+  description: string;
+  tags?: (string | Technology)[] | null;
+  category: 'frontend' | 'backend' | 'database' | 'devops' | 'full stack' | 'performance';
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
