@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Laptop, Server, Database, Code, Wrench, Rocket, MoreHorizontal } from 'lucide-react'
 import { Service, Technology } from 'src/payload-types'
 import Icon from '../DynamicIcon'
+import { cn } from '@/utilities/cn'
 
 const getCategoryIcon = (category: string) => {
   switch (category.toLowerCase()) {
@@ -64,9 +65,9 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ services }) => {
 
   return (
     <div className="container mx-auto py-12">
-      <h2 className="text-3xl font-bold mb-6 text-center">My Services</h2>
-      <Tabs defaultValue="All" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 lg:grid-cols-3 mb-6">
+      <h2 className="text-3xl font-bold mb-6 text-center text-white">My Services</h2>
+      <Tabs defaultValue="All" orientation='vertical' className="w-full flex md:flex-row flex-col gap-4">
+        <TabsList defaultValue="All"  className={cn("grid w-full grid-cols-2 lg:grid-cols-3 mb-6 gap-2")}>
           {categories.map((category) => (
             <TabsTrigger key={category} value={category}>
               {category}
@@ -75,7 +76,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ services }) => {
         </TabsList>
         {categories.map((category) => (
           <TabsContent key={category} value={category}>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
               {services
                 .filter((service) => category === 'All' || service.category === category)
                 .map((service) => (

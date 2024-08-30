@@ -1,5 +1,5 @@
 
-import { addVariablesForColors } from './addVariablesForColors';
+import { addVariablesForColors,bgPatterns } from './addVariablesForColors';
 
 
 /** @type {import('tailwindcss').Config} */
@@ -11,7 +11,7 @@ export default {
     './src/**/*.{ts,tsx}',
   ],
   darkMode: ['selector', '[data-theme="dark"]','class'],
-  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography'),addVariablesForColors],
+  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography'),addVariablesForColors,bgPatterns],
   prefix: '',
   safelist: [
     'lg:col-span-4',
